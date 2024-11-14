@@ -1,0 +1,201 @@
+<!-- 返回顶部及收缩图标 -->
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Back to top and shrink labels</title>
+    <style>
+        /* 返回顶部按钮的样式 */
+        #scrollToTopBtn {
+            position: fixed;
+            left: 20px;
+            bottom: 20px;
+            width: 50px;
+            height: 50px;
+            background: transparent;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            z-index: 9999;
+        }
+
+        #scrollToTopBtn img {
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+        }
+
+        #scrollToTopBtn:hover::after {
+            content: '返回顶部';
+            position: absolute;
+            top: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            white-space: nowrap;
+            z-index: 10000;
+        }
+
+        /* 新的固定按钮样式 */
+        #menuBtn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: transparent;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            z-index: 9999;
+        }
+
+        #menuBtn img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* 弹出的图标列表样式 */
+        #iconList {
+            position: fixed;
+            top: 70px; /* 根据需要调整 */
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            z-index: 9998;
+            pointer-events: none; /* 禁用点击事件 */
+        }
+
+        #iconList a {
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            pointer-events: none; /* 禁用点击事件 */
+            width: 50px; /* 保持与主按钮一致 */
+            height: 50px; /* 保持与主按钮一致 */
+            margin-top: 0; /* 重置上边距 */
+        }
+
+        /* 为了给图标之间添加间距 */
+        #iconList a + a {
+            margin-top: 10px; /* 图标之间的间距 */
+        }
+
+        #iconList.active a {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto; /* 启用点击事件 */
+        }
+
+        #iconList a img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* 进入时的延迟，从上到下依次增加 */
+        #iconList.active a:nth-child(1) {
+            transition-delay: 0s;
+        }
+
+        #iconList.active a:nth-child(2) {
+            transition-delay: 0.05s;
+        }
+
+        #iconList.active a:nth-child(3) {
+            transition-delay: 0.1s;
+        }
+
+        #iconList.active a:nth-child(4) {
+            transition-delay: 0.15s;
+        }
+
+        #iconList.active a:nth-child(5) {
+            transition-delay: 0.2s;
+        }
+
+        /* 退出时的延迟，从下到上依次增加 */
+        #iconList a:nth-child(1) {
+            transition-delay: 0.2s;
+        }
+
+        #iconList a:nth-child(2) {
+            transition-delay: 0.15s;
+        }
+
+        #iconList a:nth-child(3) {
+            transition-delay: 0.1s;
+        }
+
+        #iconList a:nth-child(4) {
+            transition-delay: 0.05s;
+        }
+
+        #iconList a:nth-child(5) {
+            transition-delay: 0s;
+        }
+    </style>
+</head>
+<body>
+    <!-- 页面内容 -->
+    <div style="height: 0;">
+    </div>
+    <!-- 固定按钮：返回顶部 -->
+    <button id="scrollToTopBtn" onclick="scrollToTop()">
+        <img src="https://www.blazarwingx.life/wp-content/uploads/2024/11/rocket-312767_1920.png" alt="按钮">
+    </button>
+
+    <!-- 固定按钮：菜单按钮 -->
+    <button id="menuBtn">
+        <img src="https://www.blazarwingx.life/wp-content/uploads/2024/11/stars-303203_1920.png" alt="主按钮">
+    </button>
+
+    <!-- 弹出的图标列表 -->
+    <div id="iconList">
+        <a href="https://www.nasa.gov/"><img src="https://www.blazarwingx.life/wp-content/uploads/2024/11/sirius-a-8328086_1920.png" alt="图标1"></a>
+        <a href="https://iau.org/"><img src="https://www.blazarwingx.life/wp-content/uploads/2024/11/sun-8328084_1920.png" alt="图标2"></a>
+        <a href="https://astronomerstelegram.org/"><img src="https://www.blazarwingx.life/wp-content/uploads/2024/11/stephenson-2-18-8328088_1920.png"></a>
+        <a href="https://www.cobs.si/home/"><img src="https://www.blazarwingx.life/wp-content/uploads/2024/11/vy-canis-majoris-8328085_1920.png"></a>
+        <a href="https://laysky.com"><img src="https://www.blazarwingx.life/wp-content/uploads/2024/11/uy-scuti-8328087_1920.png"></a>
+    </div>
+
+    <script>
+        // 滚动到顶部的函数
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // 菜单按钮点击事件，显示或隐藏图标列表
+        document.getElementById('menuBtn').addEventListener('click', function(event) {
+            var iconList = document.getElementById('iconList');
+            if (iconList.classList.contains('active')) {
+                iconList.classList.remove('active');
+            } else {
+                iconList.classList.add('active');
+            }
+            event.stopPropagation();
+        });
+
+        // 点击图标列表，阻止事件冒泡
+        document.getElementById('iconList').addEventListener('click', function(event) {
+            event.stopPropagation();
+        });
+
+        // 点击页面其他部分，隐藏图标列表
+        document.addEventListener('click', function(event) {
+            var iconList = document.getElementById('iconList');
+            if (iconList.classList.contains('active')) {
+                iconList.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
